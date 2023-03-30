@@ -79,6 +79,13 @@ argstr(int n, char *buf, int max)
   return fetchstr(addr, buf, max);
 }
 
+// nanotime syscall, which gets the number of nanoseconds in the Unix epoch
+uint64
+sys_nanotime(void)
+{
+    return 10;
+}
+
 // Prototypes for the functions that handle system calls.
 extern uint64 sys_fork(void);
 extern uint64 sys_exit(void);
@@ -126,6 +133,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_nanotime] sys_nanotime,
 };
 
 void
