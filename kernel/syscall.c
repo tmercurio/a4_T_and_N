@@ -83,6 +83,8 @@ argstr(int n, char *buf, int max)
 uint64
 sys_nanotime(void)
 {
+    uint64 nanotime;
+    //memset(
     return 10;
 }
 
