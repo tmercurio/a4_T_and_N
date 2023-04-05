@@ -84,7 +84,7 @@ uint64
 sys_nanotime(void)
 {
     uint64 nanotime;
-    nanotime = IOREAD(VIRTMEM, nanotime);
+    nanotime = IOREAD(VIRTMEM);
     return nanotime;
 }
 
