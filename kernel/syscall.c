@@ -84,8 +84,8 @@ uint64
 sys_nanotime(void)
 {
     uint64 nanotime;
-    //memset(
-    return 10;
+    nanotime = IOREAD(VIRTMEM, nanotime);
+    return nanotime;
 }
 
 // Prototypes for the functions that handle system calls.
