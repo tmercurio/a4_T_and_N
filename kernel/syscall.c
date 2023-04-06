@@ -84,7 +84,7 @@ uint64
 sys_nanotime(void)
 {
     uint64 nanotime;
-    //printf("%d %d\n", *(uint64*)(KERNBASE + VIRTMEM), *(uint64*)(KERNBASE + VIRTMEM + 4));
+    printf("%d %d\n", *(volatile int*)(VIRTMEM));
     nanotime = *(volatile int*)(VIRTMEM);
     return nanotime;
 }
