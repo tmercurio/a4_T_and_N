@@ -1,3 +1,8 @@
+/*
+    file: trace.c
+    modified by: Nikita Volkov (21393323) Thomas Mercurio (22209849)
+*/
+
 #include "types.h"
 #include "param.h"
 #include "memlayout.h"
@@ -84,7 +89,7 @@ uint64
 sys_nanotime(void)
 {
     uint64 nanotime;
-    nanotime = *(volatile int*)(VIRTMEM);
+    nanotime = *(volatile uint64*)(VIRTMEM);
     return nanotime;
 }
 
