@@ -66,4 +66,4 @@
 //   TRAMPOLINE (the same page as in the kernel)
 #define TRAPFRAME (TRAMPOLINE - PGSIZE)
 
-#define VIRTMEM 0x1010000
+#define VIRTMEM 0x101000
