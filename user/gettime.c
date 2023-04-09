@@ -5,6 +5,6 @@
 uint64 nanotime(void);
 
 int main() {
-    printf("%u\n", nanotime() / 1000000);
+    printf("%x\n", nanotime() / 1000000);
     return 0;
 }
