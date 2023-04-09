@@ -1,3 +1,8 @@
+/*
+    file: sysproc.c
+    Modified by: Nikita Volkov (21393323) Thomas Mercurio (22209849)
+*/
+
 #include "types.h"
 #include "riscv.h"
 #include "defs.h"
@@ -88,4 +93,11 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+uint64
+sys_trace(void)
+{
+  argint(0,&(myproc()->bitmask));
+  return 0;
 }

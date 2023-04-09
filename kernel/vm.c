@@ -1,3 +1,8 @@
+/*
+    file: vm.c
+    modified by: Nikita Volkov (21393323) Thomas Mercurio (22209849)
+*/
+
 #include "param.h"
 #include "types.h"
 #include "memlayout.h"
@@ -30,8 +35,6 @@ kvmmake(void)
   // virtio mmio disk interface
   kvmmap(kpgtbl, VIRTIO0, VIRTIO0, PGSIZE, PTE_R | PTE_W);
 
-  kvmmap(kpgtbl, VIRTMEM, VIRTMEM, PGSIZE, PTE_R | PTE_W);
-
   // PLIC
   kvmmap(kpgtbl, PLIC, PLIC, 0x400000, PTE_R | PTE_W);
 
@@ -47,7 +50,7 @@ kvmmake(void)
 
   // allocate and map a kernel stack for each process.
   proc_mapstacks(kpgtbl);
-
+  
   return kpgtbl;
 }
 
@@ -149,7 +152,7 @@ mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm)
 
   if(size == 0)
     panic("mappages: size");
-
+  
   a = PGROUNDDOWN(va);
   last = PGROUNDDOWN(va + size - 1);
   for(;;){
@@ -340,7 +343,7 @@ void
 uvmclear(pagetable_t pagetable, uint64 va)
 {
   pte_t *pte;
-
+  
   pte = walk(pagetable, va, 0);
   if(pte == 0)
     panic("uvmclear");
@@ -438,4 +441,44 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   } else {
     return -1;
   }
+}
+
+
+void
+vmprint(pagetable_t pagetable)
+{
+   printf("page table at physical address (pa) %p\n", pagetable);
+   for(int i = 0;i < 512; i++)
+   {
+     
+     if((pagetable[i] & PTE_V) == 0)
+     {
+       continue;
+      } 
+     
+     pagetable_t ch1 = (pagetable_t)PTE2PA(pagetable[i]);
+     printf( " ..%d: pte points to lower-level page table: pte %p -> pa %p\n", i, pagetable[i], ch1);
+     
+     for(int j = 0;j < 512; j++)
+     {
+       if((ch1[j] & PTE_V) == 0)
+       {
+          continue;
+       }
+         
+       pagetable_t ch2 = (pagetable_t)PTE2PA(ch1[j]);
+       
+       printf(" .. ..%d: pte points to lower-level page table: pte %p -> pa %p\n", j, ch1[j] , ch2);
+       
+       for(int k = 0;k < 512; k++)
+       {
+         if((ch2[k] & PTE_V)== 0)
+         {
+           continue;
+         }
+         pagetable_t ch3 = (pagetable_t)PTE2PA(ch2[k]);
+         printf(" .. .. ..%d: leaf pte: va %p -> pa %p\n",k ,ch2[k],ch3);       
+       }
+     }
+   }
 }
